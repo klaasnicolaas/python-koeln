@@ -49,9 +49,13 @@ Parameters:
 
 | Variable | Type | Description |
 | :------- | :--- | :---------- |
-| `name` | string | The name of the garage |
-| `longitude` | float | The longitude of the garage |
-| `latitude` | float | The latitude of the garage |
+| `entry_id` | integer | The ID for the parking location |
+| `number` | integer | The number of the parking spaces on this location |
+| `district` | string | The district name where the parking location is located |
+| `district_nr` | integer | The district number where the parking location is located |
+| `note` | string | A note about the parking location |
+| `longitude` | float | The longitude of the parking location |
+| `latitude` | float | The latitude of the parking location |
 </details>
 
 ## Example
@@ -65,8 +69,8 @@ from koeln import StadtKoeln
 async def main() -> None:
     """Show example on using the API of Köln."""
     async with StadtKoeln() as client:
-        garages = await client.garages(limit=10)
-        print(garages)
+        disabled_parkings = await client.disabled_parkings()
+        print(disabled_parkings)
 
 
 if __name__ == "__main__":

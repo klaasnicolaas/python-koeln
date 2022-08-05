@@ -1,0 +1,250 @@
+{
+    "displayFieldName": "bezeichnung",
+    "fieldAliases": {
+        "objectid": "OBJECTID",
+        "bezeichnung": "Bezeichnung",
+        "nr_stadtbezirk": "Stadtbezirk (Nr.)",
+        "stadtteil": "Stadtteil",
+        "anzahl": "Anzahl",
+        "bemerkung": "Bemerkung"
+    },
+    "geometryType": "esriGeometryPoint",
+    "spatialReference": {
+        "wkid": 4326,
+        "latestWkid": 4326
+    },
+    "fields": [
+        {
+            "name": "objectid",
+            "type": "esriFieldTypeOID",
+            "alias": "OBJECTID"
+        },
+        {
+            "name": "bezeichnung",
+            "type": "esriFieldTypeString",
+            "alias": "Bezeichnung",
+            "length": 100
+        },
+        {
+            "name": "nr_stadtbezirk",
+            "type": "esriFieldTypeString",
+            "alias": "Stadtbezirk (Nr.)",
+            "length": 75
+        },
+        {
+            "name": "stadtteil",
+            "type": "esriFieldTypeString",
+            "alias": "Stadtteil",
+            "length": 75
+        },
+        {
+            "name": "anzahl",
+            "type": "esriFieldTypeInteger",
+            "alias": "Anzahl"
+        },
+        {
+            "name": "bemerkung",
+            "type": "esriFieldTypeString",
+            "alias": "Bemerkung",
+            "length": 254
+        }
+    ],
+    "features": [
+        {
+            "attributes": {
+                "objectid": 1,
+                "bezeichnung": "Am Schwanebitzer Hof",
+                "nr_stadtbezirk": "7",
+                "stadtteil": "Urbach",
+                "anzahl": 1,
+                "bemerkung": "Am Schwanebitzer Hof"
+            },
+            "geometry": {
+                "x": 7.0803325993321282,
+                "y": 50.882115731305888
+            }
+        },
+        {
+            "attributes": {
+                "objectid": 2,
+                "bezeichnung": "Dülkenstr. 18",
+                "nr_stadtbezirk": "7",
+                "stadtteil": "Porz",
+                "anzahl": 2,
+                "bemerkung": "Dülkenstr. 18"
+            },
+            "geometry": {
+                "x": 7.0525182301080074,
+                "y": 50.890362687931805
+            }
+        },
+        {
+            "attributes": {
+                "objectid": 3,
+                "bezeichnung": "Friedrich-Ebert-Ufer",
+                "nr_stadtbezirk": "7",
+                "stadtteil": "Porz",
+                "anzahl": 1,
+                "bemerkung": "Friedrich-Ebert-Ufer"
+            },
+            "geometry": {
+                "x": 7.0545069546948289,
+                "y": 50.883368961020423
+            }
+        },
+        {
+            "attributes": {
+                "objectid": 4,
+                "bezeichnung": "Gütergasse",
+                "nr_stadtbezirk": "7",
+                "stadtteil": "Zündorf",
+                "anzahl": 1,
+                "bemerkung": "Gütergasse"
+            },
+            "geometry": {
+                "x": 7.0454599910341722,
+                "y": 50.869548002182235
+            }
+        },
+        {
+            "attributes": {
+                "objectid": 5,
+                "bezeichnung": "Heidestr. (vor Raiffeisenbank)",
+                "nr_stadtbezirk": "7",
+                "stadtteil": "Wahn",
+                "anzahl": 1,
+                "bemerkung": "Heidestr. (vor Raiffeisenbank)"
+            },
+            "geometry": {
+                "x": 7.0874422110350519,
+                "y": 50.857666265824221
+            }
+        },
+        {
+            "attributes": {
+                "objectid": 6,
+                "bezeichnung": "Hirschgraben (Gut Leidenhausen)",
+                "nr_stadtbezirk": "7",
+                "stadtteil": "Eil",
+                "anzahl": 2,
+                "bemerkung": "Hirschgraben (Gut Leidenhausen)"
+            },
+            "geometry": {
+                "x": 7.0889649369590222,
+                "y": 50.897028938454021
+            }
+        },
+        {
+            "attributes": {
+                "objectid": 7,
+                "bezeichnung": "Hohestr. 20",
+                "nr_stadtbezirk": "7",
+                "stadtteil": "Porz",
+                "anzahl": 1,
+                "bemerkung": "Hohestr. 20"
+            },
+            "geometry": {
+                "x": 7.0364683585469363,
+                "y": 50.89641577462853
+            }
+        },
+        {
+            "attributes": {
+                "objectid": 8,
+                "bezeichnung": "Josefstr. 81",
+                "nr_stadtbezirk": "7",
+                "stadtteil": "Porz",
+                "anzahl": 1,
+                "bemerkung": "Josefstr. 81"
+            },
+            "geometry": {
+                "x": 7.0566644328935721,
+                "y": 50.889113130447747
+            }
+        },
+        {
+            "attributes": {
+                "objectid": 9,
+                "bezeichnung": "Josefstr. (Altenheim)",
+                "nr_stadtbezirk": "7",
+                "stadtteil": "Porz",
+                "anzahl": 1,
+                "bemerkung": "Josefstr. 20"
+            },
+            "geometry": {
+                "x": 7.0580136545888763,
+                "y": 50.88614304224879
+            }
+        },
+        {
+            "attributes": {
+                "objectid": 10,
+                "bezeichnung": "Kaiserstr.",
+                "nr_stadtbezirk": "7",
+                "stadtteil": "Urbach",
+                "anzahl": 1,
+                "bemerkung": "Kaiserstr."
+            },
+            "geometry": {
+                "x": 7.0815858002566783,
+                "y": 50.881338079636521
+            }
+        },
+        {
+            "attributes": {
+                "objectid": 11,
+                "bezeichnung": "Rathausstr. (Wendehammer), Mo-.Fr. 7:00-18:00 Uhr",
+                "nr_stadtbezirk": "7",
+                "stadtteil": "Porz",
+                "anzahl": 3,
+                "bemerkung": "Rathausstr. (Wendehammer), Mo-.Fr. 7:00-18:00 Uhr"
+            },
+            "geometry": {
+                "x": 7.0543450519237965,
+                "y": 50.885721916367217
+            }
+        },
+        {
+            "attributes": {
+                "objectid": 12,
+                "bezeichnung": "Steinstr./Deutzer Weg",
+                "nr_stadtbezirk": "7",
+                "stadtteil": "Porz",
+                "anzahl": 2,
+                "bemerkung": "Steinstr./Deutzer Weg"
+            },
+            "geometry": {
+                "x": 7.0564592354918441,
+                "y": 50.89117848438152
+            }
+        },
+        {
+            "attributes": {
+                "objectid": 13,
+                "bezeichnung": "Urbacher Weg",
+                "nr_stadtbezirk": "7",
+                "stadtteil": "Ensen",
+                "anzahl": 4,
+                "bemerkung": "Urbacher Weg"
+            },
+            "geometry": {
+                "x": 7.0527299921987607,
+                "y": 50.892582113603417
+            }
+        },
+        {
+            "attributes": {
+                "objectid": 14,
+                "bezeichnung": "Am Gräfenhof",
+                "nr_stadtbezirk": "8",
+                "stadtteil": "Brück",
+                "anzahl": 2,
+                "bemerkung": "Am Gräfenhof"
+            },
+            "geometry": {
+                "x": 7.0760056729967467,
+                "y": 50.944451274847964
+            }
+        }
+    ]
+}
