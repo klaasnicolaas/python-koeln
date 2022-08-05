@@ -43,10 +43,6 @@ You can read the following datasets with this package:
 
 ### Disabled parking spaces
 
-Parameters:
-
-- **limit** (default: 10) - How many results you want to retrieve.
-
 | Variable | Type | Description |
 | :------- | :--- | :---------- |
 | `entry_id` | integer | The ID for the parking location |
