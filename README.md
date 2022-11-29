@@ -1,4 +1,5 @@
-## Python - ODP Köln Client
+<!-- Banner -->
+![alt Banner of the odp köln package](https://raw.githubusercontent.com/klaasnicolaas/python-koeln/main/assets/header_koeln-min.png)
 
 <!-- PROJECT SHIELDS -->
 [![GitHub Release][releases-shield]][releases]
@@ -8,10 +9,10 @@
 [![License][license-shield]](LICENSE)
 
 [![GitHub Activity][commits-shield]][commits-url]
-[![Forks][forks-shield]][forks-url]
+[![PyPi Downloads][downloads-shield]][downloads-url]
+[![GitHub Last Commit][last-commit-shield]][commits-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![GitHub Last Commit][last-commit-shield]][commits-url]
 
 [![Code Quality][code-quality-shield]][code-quality]
 [![Maintainability][maintainability-shield]][maintainability-url]
@@ -174,8 +175,8 @@ SOFTWARE.
 [commits-url]: https://github.com/klaasnicolaas/python-koeln/commits/main
 [codecov-shield]: https://codecov.io/gh/klaasnicolaas/python-koeln/branch/main/graph/badge.svg?token=CRONIDYXGQ
 [codecov-url]: https://codecov.io/gh/klaasnicolaas/python-koeln
-[forks-shield]: https://img.shields.io/github/forks/klaasnicolaas/python-koeln.svg
-[forks-url]: https://github.com/klaasnicolaas/python-koeln/network/members
+[downloads-shield]: https://img.shields.io/pypi/dm/koeln
+[downloads-url]: https://pypistats.org/packages/koeln
 [issues-shield]: https://img.shields.io/github/issues/klaasnicolaas/python-koeln.svg
 [issues-url]: https://github.com/klaasnicolaas/python-koeln/issues
 [license-shield]: https://img.shields.io/github/license/klaasnicolaas/python-koeln.svg
