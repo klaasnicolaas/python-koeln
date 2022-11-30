@@ -11,6 +11,7 @@ repository = "https://github.com/klaasnicolaas/python-koeln"
 documentation = "https://github.com/klaasnicolaas/python-koeln"
 keywords = ["open", "data", "platform", "Köln", "cologne", "parking", "api", "async", "client"]
 classifiers = [
+    "Development Status :: 5 - Production/Stable",
     "Framework :: AsyncIO",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",

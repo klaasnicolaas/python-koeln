@@ -184,7 +184,7 @@ SOFTWARE.
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2022.svg
 [maintainability-shield]: https://api.codeclimate.com/v1/badges/6c4ccfaa4a5a8cbc5ff8/maintainability
 [maintainability-url]: https://codeclimate.com/github/klaasnicolaas/python-koeln/maintainability
-[project-stage-shield]: https://img.shields.io/badge/project%20stage-experimental-yellow.svg
+[project-stage-shield]: https://img.shields.io/badge/project%20stage-production%20ready-brightgreen.svg
 [pypi]: https://pypi.org/project/koeln/
 [python-versions-shield]: https://img.shields.io/pypi/pyversions/koeln
 [typing-shield]: https://github.com/klaasnicolaas/python-koeln/actions/workflows/typing.yaml/badge.svg
