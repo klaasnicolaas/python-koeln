@@ -3,8 +3,8 @@
 import asyncio
 from unittest.mock import patch
 
-import aiohttp
 import pytest
+from aiohttp import ClientError, ClientResponse, ClientSession
 from aresponses import Response, ResponsesMockServer
 
 from koeln import ODPKoeln
@@ -13,7 +13,6 @@ from koeln.exceptions import ODPKoelnConnectionError, ODPKoelnError
 from . import load_fixtures
 
 
-@pytest.mark.asyncio
 async def test_json_request(aresponses: ResponsesMockServer) -> None:
     """Test JSON response is handled correctly."""
     aresponses.add(
@@ -26,14 +25,13 @@ async def test_json_request(aresponses: ResponsesMockServer) -> None:
             text=load_fixtures("disabled_parkings.json"),
         ),
     )
-    async with aiohttp.ClientSession() as session:
+    async with ClientSession() as session:
         client = ODPKoeln(session=session)
         response = await client._request("test")
         assert response is not None
         await client.close()
 
 
-@pytest.mark.asyncio
 async def test_internal_session(aresponses: ResponsesMockServer) -> None:
     """Test internal session is handled correctly."""
     aresponses.add(
@@ -50,22 +48,25 @@ async def test_internal_session(aresponses: ResponsesMockServer) -> None:
         await client._request("test")
 
 
-@pytest.mark.asyncio
 async def test_timeout(aresponses: ResponsesMockServer) -> None:
     """Test request timeout from the Open Data Platform API of Köln."""
 
     # Faking a timeout by sleeping
-    async def response_handler(_: aiohttp.ClientResponse) -> Response:
+    async def response_handler(_: ClientResponse) -> Response:
         await asyncio.sleep(0.2)
         return aresponses.Response(
-            body="Goodmorning!", text=load_fixtures("disabled_parkings.json")
+            body="Goodmorning!",
+            text=load_fixtures("disabled_parkings.json"),
         )
 
     aresponses.add(
-        "offenedaten-koeln.de", "/api/action/datastore/test", "GET", response_handler
+        "offenedaten-koeln.de",
+        "/api/action/datastore/test",
+        "GET",
+        response_handler,
     )
 
-    async with aiohttp.ClientSession() as session:
+    async with ClientSession() as session:
         client = ODPKoeln(
             session=session,
             request_timeout=0.1,
@@ -74,7 +75,6 @@ async def test_timeout(aresponses: ResponsesMockServer) -> None:
             assert await client._request("test")
 
 
-@pytest.mark.asyncio
 async def test_content_type(aresponses: ResponsesMockServer) -> None:
     """Test request content type error from Open Data Platform API of Köln."""
     aresponses.add(
@@ -87,18 +87,19 @@ async def test_content_type(aresponses: ResponsesMockServer) -> None:
         ),
     )
 
-    async with aiohttp.ClientSession() as session:
+    async with ClientSession() as session:
         client = ODPKoeln(session=session)
         with pytest.raises(ODPKoelnError):
             assert await client._request("test")
 
 
-@pytest.mark.asyncio
 async def test_client_error() -> None:
     """Test request client error from the Open Data Platform API of Köln."""
-    async with aiohttp.ClientSession() as session:
+    async with ClientSession() as session:
         client = ODPKoeln(session=session)
         with patch.object(
-            session, "request", side_effect=aiohttp.ClientError
+            session,
+            "request",
+            side_effect=ClientError,
         ), pytest.raises(ODPKoelnConnectionError):
             assert await client._request("test")
