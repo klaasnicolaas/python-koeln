@@ -7,7 +7,7 @@ from koeln import StadtKoeln
 
 
 async def main() -> None:
-    """Show example on using the Köln API client."""
+    """Fetch disabled parkings using the Köln API client."""
     async with StadtKoeln() as client:
         disabled_parkings = await client.disabled_parkings()
 
