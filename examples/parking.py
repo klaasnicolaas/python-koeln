@@ -11,9 +11,8 @@ async def main() -> None:
     async with StadtKoeln() as client:
         disabled_parkings = await client.disabled_parkings()
 
-        count: int
-        for index, item in enumerate(disabled_parkings, 1):
-            count = index
+        count: int = len(disabled_parkings)
+        for item in disabled_parkings:
             print(item)
 
         print("__________________________")
