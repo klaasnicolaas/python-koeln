@@ -37,7 +37,7 @@ pip install koeln
 
 You can read the following datasets with this package:
 
-- [Disabled parking spaces / Behindertenparkplätze][disabled_parkings] (425 locations)
+- [Disabled parking spaces / Behindertenparkplätze][disabled_parkings] (441 locations)
 
 <details>
     <summary>Click here to get more details</summary>
