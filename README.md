@@ -11,8 +11,7 @@
 [![GitHub Activity][commits-shield]][commits-url]
 [![PyPi Downloads][downloads-shield]][downloads-url]
 [![GitHub Last Commit][last-commit-shield]][commits-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
+[![Open in Dev Containers][devcontainer-shield]][devcontainer]
 
 [![Code Quality][code-quality-shield]][code-quality]
 [![Build Status][build-shield]][build-url]
@@ -94,8 +93,14 @@ Thank you for being involved! :heart_eyes:
 
 ## Setting up development environment
 
-This Python project is fully managed using the [Poetry][poetry] dependency
-manager.
+The simplest way to begin is by utilizing the [Dev Container][devcontainer]
+feature of Visual Studio Code or by opening a CodeSpace directly on GitHub.
+By clicking the button below you immediately start a Dev Container in Visual Studio Code.
+
+[![Open in Dev Containers][devcontainer-shield]][devcontainer]
+
+This Python project relies on [Poetry][poetry] as its dependency manager,
+providing comprehensive management and control over project dependencies.
 
 You need at least:
 
@@ -175,10 +180,10 @@ SOFTWARE.
 [commits-url]: https://github.com/klaasnicolaas/python-koeln/commits/main
 [codecov-shield]: https://codecov.io/gh/klaasnicolaas/python-koeln/branch/main/graph/badge.svg?token=CRONIDYXGQ
 [codecov-url]: https://codecov.io/gh/klaasnicolaas/python-koeln
+[devcontainer-shield]: https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode
+[devcontainer]: https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/klaasnicolaas/python-koeln
 [downloads-shield]: https://img.shields.io/pypi/dm/koeln
 [downloads-url]: https://pypistats.org/packages/koeln
-[issues-shield]: https://img.shields.io/github/issues/klaasnicolaas/python-koeln.svg
-[issues-url]: https://github.com/klaasnicolaas/python-koeln/issues
 [license-shield]: https://img.shields.io/github/license/klaasnicolaas/python-koeln.svg
 [last-commit-shield]: https://img.shields.io/github/last-commit/klaasnicolaas/python-koeln.svg
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2023.svg
@@ -191,8 +196,6 @@ SOFTWARE.
 [typing-url]: https://github.com/klaasnicolaas/python-koeln/actions/workflows/typing.yaml
 [releases-shield]: https://img.shields.io/github/release/klaasnicolaas/python-koeln.svg
 [releases]: https://github.com/klaasnicolaas/python-koeln/releases
-[stars-shield]: https://img.shields.io/github/stars/klaasnicolaas/python-koeln.svg
-[stars-url]: https://github.com/klaasnicolaas/python-koeln/stargazers
 
 [poetry-install]: https://python-poetry.org/docs/#installation
 [poetry]: https://python-poetry.org
