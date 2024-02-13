@@ -29,6 +29,7 @@ class DisabledParking:
         Returns:
         -------
             A DisabledParking object.
+
         """
         attr = data["attributes"]
         geo = data["geometry"]

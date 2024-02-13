@@ -49,6 +49,7 @@ class ODPKoeln:
             ODPKoelnConnectionError: Timeout occurred while
                 connecting to the Open Data Platform API.
             ODPKoelnError: If the data is not valid.
+
         """
         version = metadata.version(__package__)
         url = URL.build(
@@ -109,6 +110,7 @@ class ODPKoeln:
         Returns
         -------
             The Open Data Platform Koeln object.
+
         """
         return self
 
@@ -118,6 +120,7 @@ class ODPKoeln:
         Args:
         ----
             _exc_info: Exec type.
+
         """
         await self.close()
 
@@ -156,6 +159,7 @@ class StadtKoeln:
             ODPKoelnConnectionError: Timeout occurred while
                 connecting to the Open Data Platform API.
             ODPKoelnError: If the data is not valid.
+
         """
         version = metadata.version(__package__)
         url = URL.build(
@@ -211,6 +215,7 @@ class StadtKoeln:
         Returns
         -------
             A list of DisabledParking objects.
+
         """
         locations = await self._request(
             "basiskarten/stadtplanthemen/MapServer/0/query",
@@ -234,6 +239,7 @@ class StadtKoeln:
         Returns
         -------
             The Stadt Koeln object.
+
         """
         return self
 
@@ -243,5 +249,6 @@ class StadtKoeln:
         Args:
         ----
             _exc_info: Exec type.
+
         """
         await self.close()
