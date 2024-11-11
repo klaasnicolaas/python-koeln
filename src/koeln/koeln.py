@@ -15,6 +15,8 @@ from yarl import URL
 from .exceptions import ODPKoelnConnectionError, ODPKoelnError
 from .models import DisabledParking
 
+VERSION = metadata.version(__package__)
+
 
 @dataclass
 class ODPKoeln:
@@ -52,7 +54,6 @@ class ODPKoeln:
             ODPKoelnError: If the data is not valid.
 
         """
-        version = metadata.version(__package__)
         url = URL.build(
             scheme="https",
             host="offenedaten-koeln.de",
@@ -61,7 +62,7 @@ class ODPKoeln:
 
         headers = {
             "Accept": "application/json",
-            "User-Agent": f"PythonODPKoeln/{version}",
+            "User-Agent": f"PythonODPKoeln/{VERSION}",
         }
 
         if self.session is None:
