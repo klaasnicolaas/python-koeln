@@ -2,15 +2,21 @@
 
 from __future__ import annotations
 
-from aresponses import ResponsesMockServer
+from typing import TYPE_CHECKING
 
-from koeln import DisabledParking, StadtKoeln
+from aresponses import ResponsesMockServer
+from syrupy.assertion import SnapshotAssertion
 
 from . import load_fixtures
 
+if TYPE_CHECKING:
+    from koeln import DisabledParking, StadtKoeln
+
 
 async def test_all_disabled_parkings(
-    aresponses: ResponsesMockServer, stadt_koeln_client: StadtKoeln
+    aresponses: ResponsesMockServer,
+    snapshot: SnapshotAssertion,
+    stadt_koeln_client: StadtKoeln,
 ) -> None:
     """Test all disabled parkings spaces function."""
     aresponses.add(
@@ -24,10 +30,4 @@ async def test_all_disabled_parkings(
         ),
     )
     spaces: list[DisabledParking] = await stadt_koeln_client.disabled_parkings()
-    assert spaces is not None
-    for item in spaces:
-        assert isinstance(item, DisabledParking)
-        assert item.longitude is not None
-        assert item.latitude is not None
-        assert isinstance(item.longitude, float)
-        assert isinstance(item.latitude, float)
+    assert spaces == snapshot
