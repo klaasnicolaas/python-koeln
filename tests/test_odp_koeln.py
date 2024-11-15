@@ -14,7 +14,9 @@ from koeln.exceptions import ODPKoelnConnectionError, ODPKoelnError
 from . import load_fixtures
 
 
-async def test_json_request(aresponses: ResponsesMockServer) -> None:
+async def test_json_request(
+    aresponses: ResponsesMockServer, odp_koeln_client: ODPKoeln
+) -> None:
     """Test JSON response is handled correctly."""
     aresponses.add(
         "offenedaten-koeln.de",
@@ -26,11 +28,8 @@ async def test_json_request(aresponses: ResponsesMockServer) -> None:
             text=load_fixtures("disabled_parkings.json"),
         ),
     )
-    async with ClientSession() as session:
-        client = ODPKoeln(session=session)
-        response = await client._request("test")
-        assert response is not None
-        await client.close()
+    await odp_koeln_client._request("test")
+    await odp_koeln_client.close()
 
 
 async def test_internal_session(aresponses: ResponsesMockServer) -> None:
@@ -76,7 +75,9 @@ async def test_timeout(aresponses: ResponsesMockServer) -> None:
             assert await client._request("test")
 
 
-async def test_content_type(aresponses: ResponsesMockServer) -> None:
+async def test_content_type(
+    aresponses: ResponsesMockServer, odp_koeln_client: ODPKoeln
+) -> None:
     """Test request content type error from Open Data Platform API of Köln."""
     aresponses.add(
         "offenedaten-koeln.de",
@@ -87,11 +88,8 @@ async def test_content_type(aresponses: ResponsesMockServer) -> None:
             headers={"Content-Type": "blabla/blabla"},
         ),
     )
-
-    async with ClientSession() as session:
-        client = ODPKoeln(session=session)
-        with pytest.raises(ODPKoelnError):
-            assert await client._request("test")
+    with pytest.raises(ODPKoelnError):
+        assert await odp_koeln_client._request("test")
 
 
 async def test_client_error() -> None:

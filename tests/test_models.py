@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from aiohttp import ClientSession
 from aresponses import ResponsesMockServer
 
 from koeln import DisabledParking, StadtKoeln
@@ -10,7 +9,9 @@ from koeln import DisabledParking, StadtKoeln
 from . import load_fixtures
 
 
-async def test_all_disabled_parkings(aresponses: ResponsesMockServer) -> None:
+async def test_all_disabled_parkings(
+    aresponses: ResponsesMockServer, stadt_koeln_client: StadtKoeln
+) -> None:
     """Test all disabled parkings spaces function."""
     aresponses.add(
         "geoportal.stadt-koeln.de",
@@ -22,13 +23,11 @@ async def test_all_disabled_parkings(aresponses: ResponsesMockServer) -> None:
             text=load_fixtures("disabled_parkings.json"),
         ),
     )
-    async with ClientSession() as session:
-        client = StadtKoeln(session=session)
-        spaces: list[DisabledParking] = await client.disabled_parkings()
-        assert spaces is not None
-        for item in spaces:
-            assert isinstance(item, DisabledParking)
-            assert item.longitude is not None
-            assert item.latitude is not None
-            assert isinstance(item.longitude, float)
-            assert isinstance(item.latitude, float)
+    spaces: list[DisabledParking] = await stadt_koeln_client.disabled_parkings()
+    assert spaces is not None
+    for item in spaces:
+        assert isinstance(item, DisabledParking)
+        assert item.longitude is not None
+        assert item.latitude is not None
+        assert isinstance(item.longitude, float)
+        assert isinstance(item.latitude, float)
