@@ -1,0 +1,19 @@
+# serializer version: 1
+# name: test_all_disabled_parkings
+  list([
+    DisabledParking(entry_id=1, number=1, district='Urbach', district_nr=7, note='Am Schwanebitzer Hof', longitude=7.080332599332128, latitude=50.88211573130589),
+    DisabledParking(entry_id=2, number=2, district='Porz', district_nr=7, note='Dülkenstr. 18', longitude=7.052518230108007, latitude=50.890362687931805),
+    DisabledParking(entry_id=3, number=1, district='Porz', district_nr=7, note='Friedrich-Ebert-Ufer', longitude=7.054506954694829, latitude=50.88336896102042),
+    DisabledParking(entry_id=4, number=1, district='Zündorf', district_nr=7, note='Gütergasse', longitude=7.045459991034172, latitude=50.869548002182235),
+    DisabledParking(entry_id=5, number=1, district='Wahn', district_nr=7, note='Heidestr. (vor Raiffeisenbank)', longitude=7.087442211035052, latitude=50.85766626582422),
+    DisabledParking(entry_id=6, number=2, district='Eil', district_nr=7, note='Hirschgraben (Gut Leidenhausen)', longitude=7.088964936959022, latitude=50.89702893845402),
+    DisabledParking(entry_id=7, number=1, district='Porz', district_nr=7, note='Hohestr. 20', longitude=7.036468358546936, latitude=50.89641577462853),
+    DisabledParking(entry_id=8, number=1, district='Porz', district_nr=7, note='Josefstr. 81', longitude=7.056664432893572, latitude=50.88911313044775),
+    DisabledParking(entry_id=9, number=1, district='Porz', district_nr=7, note='Josefstr. 20', longitude=7.058013654588876, latitude=50.88614304224879),
+    DisabledParking(entry_id=10, number=1, district='Urbach', district_nr=7, note='Kaiserstr.', longitude=7.081585800256678, latitude=50.88133807963652),
+    DisabledParking(entry_id=11, number=3, district='Porz', district_nr=7, note='Rathausstr. (Wendehammer), Mo-.Fr. 7:00-18:00 Uhr', longitude=7.0543450519237965, latitude=50.88572191636722),
+    DisabledParking(entry_id=12, number=2, district='Porz', district_nr=7, note='Steinstr./Deutzer Weg', longitude=7.056459235491844, latitude=50.89117848438152),
+    DisabledParking(entry_id=13, number=4, district='Ensen', district_nr=7, note='Urbacher Weg', longitude=7.052729992198761, latitude=50.89258211360342),
+    DisabledParking(entry_id=14, number=2, district='Brück', district_nr=8, note='Am Gräfenhof', longitude=7.076005672996747, latitude=50.944451274847964),
+  ])
+# ---
