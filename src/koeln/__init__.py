@@ -5,9 +5,9 @@ from .koeln import ODPKoeln, StadtKoeln
 from .models import DisabledParking
 
 __all__ = [
+    "DisabledParking",
     "ODPKoeln",
     "ODPKoelnConnectionError",
     "ODPKoelnError",
-    "DisabledParking",
     "StadtKoeln",
 ]
