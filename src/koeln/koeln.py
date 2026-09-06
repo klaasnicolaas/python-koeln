@@ -15,7 +15,7 @@ from yarl import URL
 from .exceptions import ODPKoelnConnectionError, ODPKoelnError
 from .models import DisabledParking
 
-VERSION = metadata.version(__package__)
+VERSION = metadata.version("koeln")
 
 
 @dataclass
@@ -163,7 +163,7 @@ class StadtKoeln:
             ODPKoelnError: If the data is not valid.
 
         """
-        version = metadata.version(__package__)
+        version = metadata.version("koeln")
         url = URL.build(
             scheme="https",
             host="geoportal.stadt-koeln.de",
