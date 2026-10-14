@@ -285,7 +285,7 @@ class StadtKoeln:
                 raise ODPKoelnError(msg)
             for feature in features:
                 record = ParkingRecord.from_dict(feature)
-                if records and record.spot_id <= records[-1].spot_id:
+                if records and record.entry_id <= records[-1].entry_id:
                     msg = "Duplicate or unordered source identity"
                     raise ODPKoelnError(msg)
                 records.append(record)
