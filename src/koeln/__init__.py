@@ -2,12 +2,14 @@
 
 from .exceptions import ODPKoelnConnectionError, ODPKoelnError
 from .koeln import ODPKoeln, StadtKoeln
-from .models import DisabledParking
+from .models import DisabledParking, ParkingCollection, ParkingRecord
 
 __all__ = [
     "DisabledParking",
     "ODPKoeln",
     "ODPKoelnConnectionError",
     "ODPKoelnError",
+    "ParkingCollection",
+    "ParkingRecord",
     "StadtKoeln",
 ]
