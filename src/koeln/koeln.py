@@ -13,7 +13,7 @@ from aiohttp.hdrs import METH_GET
 from yarl import URL
 
 from .exceptions import ODPKoelnConnectionError, ODPKoelnError
-from .models import DisabledParking
+from .models import DisabledParking, ParkingCollection, ParkingRecord
 
 VERSION = metadata.version("koeln")
 
@@ -210,6 +210,87 @@ class StadtKoeln:
             )
 
         return await response.json()
+
+    async def parking_collection(
+        self, *, max_records: int = 10000
+    ) -> ParkingCollection:
+        """Read the current entire layer twice; reject incomplete or changing data.
+
+        The source's integer ``id`` is retained without claiming continuity across
+        source rebuilds. No dataset revision or record observation date is exposed.
+        """
+        if (
+            isinstance(max_records, bool)
+            or not isinstance(max_records, int)
+            or max_records < 1
+        ):
+            msg = "max_records must be a positive integer"
+            raise ValueError(msg)
+        uri = "verkehr/behindertenparkplaetze/MapServer/0/query"
+        count = await self._request(
+            uri, params={"where": "1=1", "returnCountOnly": "true", "f": "json"}
+        )
+        total = count.get("count") if isinstance(count, dict) else None
+        if (
+            isinstance(total, bool)
+            or not isinstance(total, int)
+            or not 0 <= total <= max_records
+        ):
+            msg = "Invalid or excessive source count"
+            raise ODPKoelnError(msg)
+        first, pages = await self._parking_pages(uri, total)
+        second, _ = await self._parking_pages(uri, total)
+        final = await self._request(
+            uri, params={"where": "1=1", "returnCountOnly": "true", "f": "json"}
+        )
+        if final != count or first != second:
+            msg = "Source changed during collection"
+            raise ODPKoelnError(msg)
+        return ParkingCollection(first, total, pages, None)
+
+    async def _parking_pages(
+        self, uri: str, total: int
+    ) -> tuple[list[ParkingRecord], int]:
+        """Fetch ordered pages, validating IDs, CRS and exact page lengths."""
+        records: list[ParkingRecord] = []
+        pages = 0
+        for offset in range(0, max(total, 1), 500):
+            payload = await self._request(
+                uri,
+                params={
+                    "where": "1=1",
+                    "outFields": "*",
+                    "outSR": "4326",
+                    "f": "json",
+                    "orderByFields": "id ASC",
+                    "resultOffset": offset,
+                    "resultRecordCount": 500,
+                },
+            )
+            features = payload.get("features") if isinstance(payload, dict) else None
+            if (
+                not isinstance(payload, dict)
+                or payload.get("error")
+                or not isinstance(payload.get("spatialReference"), dict)
+                or payload["spatialReference"].get("wkid") != 4326
+                or payload.get("geometryType") != "esriGeometryPoint"
+                or not isinstance(features, list)
+                or len(features) != min(500, total - offset)
+                or (
+                    offset + len(features) >= total
+                    and payload.get("exceededTransferLimit", False)
+                )
+            ):
+                msg = "Incomplete or invalid source page"
+                raise ODPKoelnError(msg)
+            for feature in features:
+                record = ParkingRecord.from_dict(feature)
+                if records and record.id <= records[-1].id:
+                    msg = "Duplicate or unordered source identity"
+                    raise ODPKoelnError(msg)
+                records.append(record)
+            pages += 1
+        return records, pages
 
     async def disabled_parkings(self) -> list[DisabledParking]:
         """Get list of disabled parking spaces.

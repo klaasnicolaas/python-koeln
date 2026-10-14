@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Self
+
+from .exceptions import ODPKoelnError
 
 
 @dataclass
@@ -43,3 +46,50 @@ class DisabledParking:
             longitude=geo["x"],
             latitude=geo["y"],
         )
+
+
+@dataclass
+class ParkingRecord:
+    """Original identity, WGS84 position and unmodified municipal claims."""
+
+    id: int
+    geometry: dict[str, Any]
+    source_attributes: dict[str, Any]
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> Self:
+        """Parse original source values and reject unusable identity or position."""
+        try:
+            attributes = data["attributes"]
+            identity = attributes["id"]
+            geometry = data["geometry"]
+            coordinates = [geometry["x"], geometry["y"]]
+        except (KeyError, TypeError) as error:
+            msg = "Missing source identity or geometry"
+            raise ODPKoelnError(msg) from error
+        if isinstance(identity, bool) or not isinstance(identity, int) or identity < 1:
+            msg = "Invalid source identity"
+            raise ODPKoelnError(msg)
+        for value, bound in zip(coordinates, (180, 90), strict=True):
+            if (
+                isinstance(value, bool)
+                or not isinstance(value, (int, float))
+                or not math.isfinite(value)
+                or not -bound <= value <= bound
+            ):
+                msg = "Invalid WGS84 source position"
+                raise ODPKoelnError(msg)
+        return cls(
+            identity, {"type": "Point", "coordinates": coordinates}, attributes.copy()
+        )
+
+
+@dataclass
+class ParkingCollection:
+    """A complete selection, with source count and retrieval evidence."""
+
+    records: list[ParkingRecord]
+    total_count: int
+    pages_fetched: int
+    source_version: str | None
+    complete: bool = True
