@@ -52,7 +52,7 @@ class DisabledParking:
 class ParkingRecord:
     """Original identity, WGS84 position and unmodified municipal claims."""
 
-    entry_id: int
+    id: int
     geometry: dict[str, Any]
     source_attributes: dict[str, Any]
 

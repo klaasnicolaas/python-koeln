@@ -41,7 +41,7 @@ async def test_complete_collection() -> None:
         result.complete,
     ) == (2, 1, None, True)
     assert result.records[0].source_attributes == response["features"][0]["attributes"]
-    assert result.records[0].entry_id == 1
+    assert result.records[0].id == 1
     assert result.records[0].geometry == {"type": "Point", "coordinates": [6.95, 50.94]}
     assert request.call_args_list[1].kwargs["params"]["orderByFields"] == "id ASC"
     assert request.call_args_list[0].args == (
