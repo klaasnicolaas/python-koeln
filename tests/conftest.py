@@ -9,7 +9,7 @@ from koeln import ODPKoeln, StadtKoeln
 
 
 @pytest.fixture(name="odp_koeln_client")
-async def odp_client() -> AsyncGenerator[ODPKoeln, None]:
+async def odp_client() -> AsyncGenerator[ODPKoeln]:
     """Return an ODP Koeln client."""
     async with (
         ClientSession() as session,
@@ -19,7 +19,7 @@ async def odp_client() -> AsyncGenerator[ODPKoeln, None]:
 
 
 @pytest.fixture(name="stadt_koeln_client")
-async def stadt_client() -> AsyncGenerator[StadtKoeln, None]:
+async def stadt_client() -> AsyncGenerator[StadtKoeln]:
     """Return an Stadt Koeln client."""
     async with (
         ClientSession() as session,
