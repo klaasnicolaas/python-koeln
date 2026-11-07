@@ -151,6 +151,8 @@ async def test_invalid_nrw_record_fails_closed(field: str, value: object) -> Non
         "excessive",
         "version",
         "timestamp",
+        "timezone",
+        "timestamp-type",
         "changed",
         "missing",
         "paginated",
@@ -168,6 +170,10 @@ async def test_invalid_or_changed_nrw_snapshot(case: str) -> None:
         data["modelBaseVersion"] = "unknown"
     elif case == "timestamp":
         data["parkingPublicationLight"]["publicationTime"] = "not a timestamp"
+    elif case == "timezone":
+        data["parkingPublicationLight"]["publicationTime"] = "2026-01-01T09:00:00"
+    elif case == "timestamp-type":
+        data["parkingPublicationLight"]["publicationTime"] = 123
     elif case == "changed":
         second["parkingPublicationLight"]["parkingSite"][0]["numberOfSpaces"] = 2
     elif case == "missing":
