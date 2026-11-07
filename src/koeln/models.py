@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import re
 from dataclasses import dataclass
 from typing import Any, Self
 
@@ -83,6 +84,40 @@ class ParkingRecord:
             identity, {"type": "Point", "coordinates": coordinates}, attributes.copy()
         )
 
+    @classmethod
+    def from_nrw_dict(cls, data: dict[str, Any]) -> Self:
+        """Map only NRW's Köln ID namespace back to the original integer ID."""
+        message = "Invalid NRW source identity, capacity or geometry"
+        try:
+            identity = data["id"]
+            position = data["locationAndDimension"]["coordinatesForDisplay"]
+            number = data["numberOfSpaces"]
+            match = (
+                re.fullmatch(r"parking-disabled-koeln-([1-9][0-9]*)", identity)
+                if isinstance(identity, str)
+                else None
+            )
+            if match is None or (
+                number is not None
+                and (
+                    isinstance(number, bool)
+                    or not isinstance(number, int)
+                    or number < 0
+                )
+            ):
+                raise ODPKoelnError(message)
+            record = cls.from_dict(
+                {
+                    "attributes": {"id": int(match[1])},
+                    "geometry": {"x": position["longitude"], "y": position["latitude"]},
+                }
+            )
+        except (KeyError, TypeError, ValueError) as error:
+            msg = "Invalid NRW source identity, capacity or geometry"
+            raise ODPKoelnError(msg) from error
+        record.source_attributes = data.copy()
+        return record
+
 
 @dataclass
 class ParkingCollection:
@@ -93,3 +128,4 @@ class ParkingCollection:
     pages_fetched: int
     source_version: str | None
     complete: bool = True
+    source_url: str | None = None
