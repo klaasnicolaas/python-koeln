@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import socket
 from dataclasses import dataclass
+from datetime import datetime
 from importlib import metadata
 from typing import Any, Self
 
@@ -16,6 +17,11 @@ from .exceptions import ODPKoelnConnectionError, ODPKoelnError
 from .models import DisabledParking, ParkingCollection, ParkingRecord
 
 VERSION = metadata.version("koeln")
+NRW_PARKING_URL = "https://www.mobilitaetsdaten.nrw/api/systemadapter-mobilithek-exporter/behindertenparkplaetze-koeln.json"
+
+
+class _UnexpectedContentTypeError(ODPKoelnError):
+    """An unavailable service returned a web page instead of source JSON."""
 
 
 @dataclass
@@ -142,6 +148,7 @@ class StadtKoeln:
         *,
         method: str = METH_GET,
         params: dict[str, Any] | None = None,
+        content_types: tuple[str, ...] = ("application/json",),
     ) -> Any:
         """Handle a request to the Stadt of Köln API.
 
@@ -181,43 +188,39 @@ class StadtKoeln:
 
         try:
             async with asyncio.timeout(self.request_timeout):
-                response = await self.session.request(
-                    method,
-                    url,
-                    params=params,
-                    headers=headers,
-                    ssl=True,
-                )
-                response.raise_for_status()
+                async with self.session.request(
+                    method, url, params=params, headers=headers, ssl=True
+                ) as response:
+                    response.raise_for_status()
+                    content_type = response.headers.get("Content-Type", "")
+                    if (
+                        content_type.split(";", 1)[0].strip().lower()
+                        not in content_types
+                    ):
+                        text = await response.text()
+                        msg = "Expected source JSON instead of a web page"
+                        raise _UnexpectedContentTypeError(
+                            msg, {"Content-Type": content_type, "Response": text}
+                        )
+                    try:
+                        return await response.json(content_type=None)
+                    except ValueError as error:
+                        msg = "Invalid source JSON"
+                        raise ODPKoelnError(msg) from error
         except TimeoutError as exception:
             msg = "Timeout occurred while connecting to the Open Data Platform API."
-            raise ODPKoelnConnectionError(
-                msg,
-            ) from exception
+            raise ODPKoelnConnectionError(msg) from exception
         except (ClientError, socket.gaierror) as exception:
             msg = "Error occurred while communicating with Open Data Platform API."
-            raise ODPKoelnConnectionError(
-                msg,
-            ) from exception
-
-        content_type = response.headers.get("Content-Type", "")
-        if "application/json" not in content_type:
-            text = await response.text()
-            msg = "Unexpected content type response from the Open Data Platform API"
-            raise ODPKoelnError(
-                msg,
-                {"Content-Type": content_type, "Response": text},
-            )
-
-        return await response.json()
+            raise ODPKoelnConnectionError(msg) from exception
 
     async def parking_collection(
         self, *, max_records: int = 10000
     ) -> ParkingCollection:
         """Read the current entire layer twice; reject incomplete or changing data.
 
-        The source's integer ``id`` is retained without claiming continuity across
-        source rebuilds. No dataset revision or record observation date is exposed.
+        Keep integer IDs across the official NRW fallback on transport failure.
+        A mirror publication marker is not a record observation date.
         """
         if (
             isinstance(max_records, bool)
@@ -226,6 +229,13 @@ class StadtKoeln:
         ):
             msg = "max_records must be a positive integer"
             raise ValueError(msg)
+        try:
+            return await self._arcgis_collection(max_records)
+        except (ODPKoelnConnectionError, _UnexpectedContentTypeError):
+            return await self._nrw_collection(max_records)
+
+    async def _arcgis_collection(self, max_records: int) -> ParkingCollection:
+        """Keep primary validation failures distinct from transport availability."""
         uri = "verkehr/behindertenparkplaetze/MapServer/0/query"
         count = await self._request(
             uri, params={"where": "1=1", "returnCountOnly": "true", "f": "json"}
@@ -247,6 +257,62 @@ class StadtKoeln:
             msg = "Source changed during collection"
             raise ODPKoelnError(msg)
         return ParkingCollection(first, total, pages, None)
+
+    async def _nrw_collection(self, max_records: int) -> ParkingCollection:
+        """Read the official complete NRW document twice without mixing sources."""
+        first = await self._request(
+            NRW_PARKING_URL,
+            content_types=("application/json", "application/octet-stream"),
+        )
+        records, version = self._nrw_records(first, max_records)
+        second = await self._request(
+            NRW_PARKING_URL,
+            content_types=("application/json", "application/octet-stream"),
+        )
+        repeated, repeated_version = self._nrw_records(second, max_records)
+        if records != repeated or version != repeated_version:
+            msg = "NRW source changed during collection"
+            raise ODPKoelnError(msg)
+        return ParkingCollection(
+            records, len(records), 1, version, source_url=NRW_PARKING_URL
+        )
+
+    @staticmethod
+    def _nrw_records(payload: Any, max_records: int) -> tuple[list[ParkingRecord], str]:
+        """Validate the full document, original ID namespace and publication marker."""
+        message = "Invalid or incomplete NRW source document"
+        try:
+            if (
+                not isinstance(payload, dict)
+                or set(payload) != {"modelBaseVersion", "parkingPublicationLight"}
+                or payload["modelBaseVersion"] != "3"
+            ):
+                raise ODPKoelnError(message)
+            publication = payload["parkingPublicationLight"]
+            if not isinstance(publication, dict) or set(publication) != {
+                "publicationTime",
+                "parkingSite",
+            }:
+                raise ODPKoelnError(message)
+            version = publication["publicationTime"]
+            if (
+                not isinstance(version, str)
+                or datetime.fromisoformat(version).tzinfo is None
+            ):
+                raise ODPKoelnError(message)
+            sites = publication["parkingSite"]
+            if not isinstance(sites, list) or not 0 < len(sites) <= max_records:
+                raise ODPKoelnError(message)
+            records = sorted(
+                (ParkingRecord.from_nrw_dict(item) for item in sites),
+                key=lambda record: record.id,
+            )
+            if len({record.id for record in records}) != len(records):
+                raise ODPKoelnError(message)
+        except (KeyError, TypeError, ValueError) as error:
+            msg = "Invalid or incomplete NRW source document"
+            raise ODPKoelnError(msg) from error
+        return records, version
 
     async def _parking_pages(
         self, uri: str, total: int
